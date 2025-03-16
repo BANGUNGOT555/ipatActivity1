@@ -2,60 +2,123 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 
 
-const API_URL = "http://localhost:5000/api/items";
+const API_URL = "http://localhost:5000/api/schedules";
 
 
 function App () {
-  const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState("");
+  const [schedules, setSchedules] = useState([]);
+
+  const [subject, setSubject] = useState("");
+  const [day, setDay] = useState("");
+  const [subjectTime, setSubjectTime] = useState("");
+  const [room, setRoom] = useState("");
+
 
 
 
   useEffect(() => {
     axios
     .get(API_URL)
-    .then((response) => setItems(response.data))
+    .then((response) => setSchedules(response.data))
     .catch((error) => console.error("Error fetching items", error));
   }, []);
 
   
-  const addItem = () => {
+  const addSchedule = () => {
     axios
-    .post(API_URL, {name: newItem})
-    .then((response) => setItems([...items, response.data]))
-    .catch((error) => console.error("Error adding items:", error));
-  };
-
-
-  const updateItem = (id, name) => {
-    axios
-    .put(`${API_URL}/${id}`, { name })
+    .post(API_URL, {subject: subject, day: day, subjectTime: subjectTime, room})
     .then((response) => {
-      setItems(items.map((item) => (item.id === id ? response.data : item)));
+      setSchedules([...schedules, response.data])
+        setSubject("");
+        setDay("");
+        setSubjectTime("");
+        setRoom("");
     })
-    .catch((error) => console.error("Error updating item:", error));
+    .catch((error) => console.error("Error adding schedule:", error));
   };
 
 
-  const deleteItem = (id) => {
+  const updateSchedule = (id, field, value) => {
+    
+    const updateSchedule = schedules.find(schedule => schedule.id ===id);
+    if(!updateSchedule) return;
+
+      const updateData = {
+        subject: updateSchedule.subject,
+        day: updateSchedule.day,
+        subjectTime: updateSchedule.subjectTime,
+        room: updateSchedule.room,
+        [field]: value
+      };
+
+    axios
+    .put(`${API_URL}/${id}`, updateData)
+    .then((response) => {
+      setSchedules(schedules.map((schedule) => (schedule.id === id ? response.data : schedule)));
+    })
+    .catch((error) => console.error("Error updating schedule:", error));
+  };
+
+
+  const deleteSchedule = (id) => {
     axios
     .delete(`${API_URL}/${id}`)
     .then(() => {
-      setItems(items.filter((item) => item.id !== id));
+      setSchedules(schedules.filter((schedule) => schedule.id !== id));
     })
-    .catch((error) => console.error("Error updating item:", error));
+    .catch((error) => console.error("Error deleting item:", error));
   }
 
 return(
   <div>
-    <h1> React + Express REST API </h1>
-    <input type="text" value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="New Item"/>
-    <button onClick={addItem}> Add Item </button>
+    <h1> Subject Schedule </h1>
+
+    <input type="text" 
+    value={subject} 
+    onChange={(e) => setSubject(e.target.value)} placeholder="Subject"
+    />
+
+    <input type="text" 
+    value={day} 
+    onChange={(e) => setDay(e.target.value)} placeholder="Day"
+    />
+
+    <input type="text" 
+    value={subjectTime} 
+    onChange={(e) => setSubjectTime(e.target.value)} placeholder="Time"
+    />
+    
+    <input type="text" 
+    value={room} 
+    onChange={(e) => setRoom(e.target.value)} placeholder="Room"
+    />
+    
+    <button onClick={addSchedule}> Add Schedule </button>
+
     <ul>
-      {items.map((item) => (
-        <li key={item.id}>
-            <input type="text" value={item.name} onChange={(e) => updateItem(item.id, e.target.value)}/>  
-            <button onClick={() => deleteItem(item.id)}> Delete </button>      
+      {schedules.map((schedule) => (
+        <li key={schedule.id}>
+            <input type="text" 
+            value={schedule.subject}
+            onChange={(e) => updateSchedule(schedule.id, "subject", e.target.value)}
+            />  
+
+            <input type="text" 
+            value={schedule.day} 
+            onChange={(e) => updateSchedule(schedule.id, "day", e.target.value)}
+            />
+
+            <input type="text" 
+            value={schedule.subjectTime} 
+            onChange={(e) => updateSchedule(schedule.id, "subjectTime", e.target.value)}
+            />
+
+            <input type="text" 
+            value={schedule.room} 
+            onChange={(e) => updateSchedule(schedule.id, "room", e.target.value)}
+            />
+
+            <button onClick={() => deleteSchedule(schedule.id)}> Delete </button>      
         </li>
       ))}
     </ul>
