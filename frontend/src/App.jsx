@@ -69,62 +69,62 @@ function App () {
     .catch((error) => console.error("Error deleting item:", error));
   }
 
-return(
-  <div>
-    <h1> Subject Schedule </h1>
-
-    <input type="text" 
-    value={subject} 
-    onChange={(e) => setSubject(e.target.value)} placeholder="Subject"
-    />
-
-    <input type="text" 
-    value={day} 
-    onChange={(e) => setDay(e.target.value)} placeholder="Day"
-    />
-
-    <input type="text" 
-    value={subjectTime} 
-    onChange={(e) => setSubjectTime(e.target.value)} placeholder="Time"
-    />
-    
-    <input type="text" 
-    value={room} 
-    onChange={(e) => setRoom(e.target.value)} placeholder="Room"
-    />
-    
-    <button onClick={addSchedule}> Add Schedule </button>
-
-    <ul>
-      {schedules.map((schedule) => (
-        <li key={schedule.id}>
-            <input type="text" 
-            value={schedule.subject}
-            onChange={(e) => updateSchedule(schedule.id, "subject", e.target.value)}
-            />  
-
-            <input type="text" 
-            value={schedule.day} 
-            onChange={(e) => updateSchedule(schedule.id, "day", e.target.value)}
-            />
-
-            <input type="text" 
-            value={schedule.subjectTime} 
-            onChange={(e) => updateSchedule(schedule.id, "subjectTime", e.target.value)}
-            />
-
-            <input type="text" 
-            value={schedule.room} 
-            onChange={(e) => updateSchedule(schedule.id, "room", e.target.value)}
-            />
-
-            <button onClick={() => deleteSchedule(schedule.id)}> Delete </button>      
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-}
+  return(
+    <div>
+      <h1> Subject Schedule </h1>
+  
+      <input type="text" 
+      value={subject} 
+      onChange={(e) => setSubject(e.target.value)} placeholder="Subject"
+      />
+  
+      <input type="text" 
+      value={day} 
+      onChange={(e) => setDay(e.target.value)} placeholder="Day"
+      />
+  
+      <input type="text" 
+      value={subjectTime} 
+      onChange={(e) => setSubjectTime(e.target.value)} placeholder="Time"
+      />
+      
+      <input type="text" 
+      value={room} 
+      onChange={(e) => setRoom(e.target.value)} placeholder="Room"
+      />
+      
+      <button onClick={addSchedule}> Add Schedule </button>
+  
+      <ul>
+        {schedules.map((schedule) => (
+          <li key={schedule.id}>
+              <input type="text" 
+              value={schedule.subject}
+              onChange={(e) => updateSchedule(schedule.id, "subject", e.target.value)}
+              />  
+  
+              <input type="text" 
+              value={schedule.day} 
+              onChange={(e) => updateSchedule(schedule.id, "day", e.target.value)}
+              />
+  
+              <input type="text" 
+              value={schedule.subjectTime} 
+              onChange={(e) => updateSchedule(schedule.id, "subjectTime", e.target.value)}
+              />
+  
+              <input type="text" 
+              value={schedule.room} 
+              onChange={(e) => updateSchedule(schedule.id, "room", e.target.value)}
+              />
+  
+              <button onClick={() => deleteSchedule(schedule.id)}> Delete </button>      
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+  }
 
 
 
